@@ -11,10 +11,6 @@ const dstPath = path.join(__dirname, 'files-copy');
 const srcPath = path.join(__dirname, 'files');
 
 console.log('Hello, validating folder ...');
-// fs.mkdir(dstPath, { recursive: true }, (err) => {
-//   if (err) console.log('Error<!>:', err);
-//   console.log('Directory created...');
-// });
 
 try {
   await fs.access(dstPath, fs.constants.F_OK);
@@ -31,7 +27,6 @@ async function copyFiles(src, dst) {
     fs.unlink(path.join(dst, file), (err) => {
       if (err) throw err;
     })
-    // console.log('deleted : ', file);
   }
 
   const srcfiles = await fs.readdir(src);
@@ -51,16 +46,3 @@ async function copyFiles(src, dst) {
 
 copyFiles(srcPath, dstPath);
 
-
-// fs.access(dstPath, fs.constants.R_OK, (err) => {
-//   if (err) {
-//     console.log('Creating target foloer...');
-//     fs.mkdir(dstPath, { recursive: true }, (err) => {
-//       if (err) console.log('Error<!>:', err);
-//       console.log('Directory created...');
-//     })
-//   }
-//   console.log('Directory exists... cleaning');
-//   console.log('Hello, coping files from FILES to FILES-COPY started...');
-
-// });
