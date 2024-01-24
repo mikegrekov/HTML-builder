@@ -4,7 +4,7 @@ import fsnp from 'node:fs';
 import { fileURLToPath } from 'url';
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
-import { async } from 'fast-glob';
+// import { async } from 'fast-glob';
 // import { async } from 'fast-glob';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,8 +13,10 @@ const __dirname = path.dirname(__filename);
 const dstPath = path.join(__dirname, 'project-dist');
 const dstPathAssets = path.join(dstPath, 'assets');
 const dstPathCSS = path.join(__dirname, 'project-dist', 'style.css');
+const dstPathHTML = path.join(__dirname, 'project-dist', 'index.html');
 const srcPathCSS = path.join(__dirname, 'styles');
 const srcPathAssets = path.join(__dirname, 'assets');
+const htmlTemplate = path.join(__dirname, 'template.html');
 
 console.log('Hello, starting building project...');
 await createFolder(dstPath);
@@ -34,7 +36,6 @@ async function createFolder(dst) {
 }
 
 //copy Assets
-
 async function copyFiles(src, dst) {
   const dstfiles = await fs.readdir(dst);
   
@@ -75,7 +76,6 @@ async function copyFiles(src, dst) {
 }
 
 //buld CSS
-
 async function mergeStyles(srcPath, dstPath) {
   const files = await fs.readdir(srcPath, { withFileTypes: true });
 
@@ -85,7 +85,7 @@ async function mergeStyles(srcPath, dstPath) {
       if (err) {
         console.error(err);
       } else {
-        console.error('Write bundle.css file successfully with no content');
+        // console.error('Write bundle.css file successfully with no content');
       }
     });
     //read .css
@@ -104,8 +104,26 @@ async function mergeStyles(srcPath, dstPath) {
   }
 }
 
+await buildHTML(htmlTemplate, dstPathHTML);
 // build html
+async function buildHTML(templatePath, dstPath) {
+  let data = "";
+  const htmlTemplateContent = await fs.readFile(templatePath, { encoding: 'utf8' });
+  const htmlSections = htmlTemplateContent.match(/\{\{([^}]+)\}\}/g);
+  let htmlTargetContent = htmlTemplateContent;
 
-async function buildHTML() {
-  
+  for (const htmlSection of htmlSections) {
+    let htmlFilePath = path.join(__dirname, 'components', htmlSection.replaceAll(/[{}]/g, '').concat('.html'));
+    console.log('>>>>>>>!!>>>>>>>',htmlFilePath);
+    const htmlComponentContent = await fs.readFile(htmlFilePath, { encoding: 'utf8' });
+    htmlTargetContent = htmlTargetContent.replace( `{{${htmlSection.replaceAll(/[{}]/g, '')}}}`, htmlComponentContent);
+  }
+  // console.log(htmlTargetContent);
+  await fs.writeFile(dstPath, htmlTargetContent, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.error('HTML is created, please verify');
+    }
+  });
 }
