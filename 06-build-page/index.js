@@ -99,12 +99,6 @@ async function mergeStyles(srcPath, dstPath) {
       if (file.isFile() && path.extname(filePath) === '.css') {
         const fileContent = await fs.readFile(filePath, { encoding: 'utf8' });
         await fs.appendFile(dstPath, fileContent);
-        // console.log(
-        //   `Merging style file ${path.basename(
-        //     filePath,
-        //     path.extname(filePath),
-        //   )}`,
-        // );
       }
     }
     console.log('styles.css is done');
@@ -150,3 +144,11 @@ async function buildHTML(templatePath, dstPath) {
     console.log('Error while building index.html: ', error);
   }
 }
+
+
+// npm run 01-read-file
+// npm run 02-write-file
+// npm run 03-files-in-folder
+// npm run 04-copy-directory
+// npm run 05-merge-styles
+// npm run 06-build-page
