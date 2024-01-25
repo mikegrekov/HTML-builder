@@ -92,7 +92,8 @@ async function mergeStyles(srcPath, dstPath) {
     });
     //read .css
     for (const file of files) {
-      let filePath = path.join(file.path, file.name);
+      let filePath = path.join(srcPath, file.name);
+      // let filePath = path.join(file.path, file.name);
       let fileStat = await fs.stat(filePath);
       if (file.isFile() && path.extname(filePath) === '.css') {
         const fileContent = await fs.readFile(filePath, { encoding: 'utf8' });
