@@ -2,8 +2,6 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import fsnp from 'node:fs';
 import { fileURLToPath } from 'url';
-import * as readline from 'node:readline/promises';
-import { stdin as input, stdout as output } from 'node:process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

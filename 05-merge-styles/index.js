@@ -1,21 +1,19 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import fsnp from 'node:fs';
 import { fileURLToPath } from 'url';
-import * as readline from 'node:readline/promises';
-import { stdin as input, stdout as output } from 'node:process';
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url); 
 const __dirname = path.dirname(__filename);
 const dstPath = path.join(__dirname, 'project-dist','bundle.css');
 const srcPath = path.join(__dirname, 'styles');
 
 console.log('Hello, starting copy .css styles...');
 
-const files = await fs.readdir(srcPath, { withFileTypes: true });
 
 try {
   // create bundle.css
+  const files = await fs.readdir(srcPath, { withFileTypes: true });
+
   await fs.writeFile(dstPath, '', err => {
     if (err) {
       console.error(err);
@@ -25,7 +23,9 @@ try {
   });
   //read .css
   for (const file of files) {
-    let filePath = path.join(file.path, file.name);
+    console.log('dirent >>>>>>>>',srcPath, file.name);
+    let filePath = path.join(srcPath, file.name);
+    // let filePath = path.join(file.path, file.name);
     let fileStat = await fs.stat(filePath)
     if (file.isFile() && path.extname(filePath) === '.css') {
       const fileContent = await fs.readFile(filePath, { encoding: 'utf8' });
@@ -36,7 +36,7 @@ try {
   };
   console.log('bundle.css is done');
 } catch (error) {
-  console.log('error: ', error);
+  console.log('Heppened error: ', error);
 }
 
 
